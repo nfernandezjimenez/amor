@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #2c3e50, #e74c3c); /* Gradiente de colores apagados */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        .player-container {
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.8); /* Fondo negro semi-transparente */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            color: #fff;
+            text-align: center;
+        }
+        .cover-container {
+            margin-right: 20px; /* Espacio entre la portada y el reproductor */
+        }
+        .cover-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .player-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        audio {
+            margin-bottom: 15px;
+            width: 300px; /* Ajusta el ancho del reproductor si es necesario */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        .song-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #e74c3c; /* Color relacionado con el fondo */
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Estilo de fuente más bonito */
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <div class="cover-container">
+            <img id="coverImage" class="cover-image" src="images/cover1.jpg" alt="Portada de la canción">
+        </div>
+        <div class="player-content">
+            <div class="song-title" id="songTitle">Cargando canción...</div>
+            <audio id="audioPlayer" controls autoplay>
+                <source id="audioSource" src="music/Le Pido A Dios.mp3" type="audio/mpeg">
+                Tu navegador no soporta el reproductor de audio.
+            </audio>
+            <div class="controls">
+                <button id="prevButton">← Anterior</button>
+                <button id="nextButton">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lista de canciones con sus portadas y títulos
+        const songs = [
+            { src: 'music/Le Pido A Dios.mp3', cover: 'images/cover1.jpg', title: 'Le Pido A Dios' },
+            { src: 'music/BESOS.mp3', cover: 'images/cover2.jpg', title: 'BESOS' },
+            { src: 'music/Kidd Keo - Celine.mp3', cover: 'images/cover3.jpg', title: 'Kidd Keo - Celine' },
+            { src: 'music/Querer Querernos.mp3', cover: 'images/cover4.jpg', title: 'Querer Querernos' },
+            { src: 'music/Reina Pepiada.mp3', cover: 'images/cover5.jpg', title: 'Reina Pepiada' },
+            { src: 'music/Sin Drama.mp3', cover: 'images/cover6.jpg', title: 'Sin Drama' },
+            { src: 'music/Muerte En Hawaii.mp3', cover: 'images/cover7.jpg', title: 'Muerte En Hawaii' },
+            { src: 'music/Promesa.mp3', cover: 'images/cover8.jpg', title: 'Promesa' },
+            { src: 'music/Especial.mp3', cover: 'images/cover9.jpg', title: 'Especial' }
+        ];
+
+        let currentSongIndex = 0;
+
+        // Seleccionamos los elementos del reproductor, el título de la canción y los botones
+        const audioPlayer = document.getElementById('audioPlayer');
+        const audioSource = document.getElementById('audioSource');
+        const coverImage = document.getElementById('coverImage');
+        const songTitle = document.getElementById('songTitle');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+
+        // Función para actualizar la canción, la portada y el título
+        function updateSong() {
+            const song = songs[currentSongIndex];
+            audioSource.src = song.src;
+            coverImage.src = song.cover;
+            songTitle.textContent = song.title;
+            audioPlayer.load(); // Carga la nueva canción
+            audioPlayer.play(); // Reproduce la nueva canción
+        }
+
+        // Inicializar con la primera canción
+        updateSong();
+
+        // Evento para el botón "Anterior"
+        prevButton.addEventListener('click', function() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            updateSong();
+        });
+
+        // Evento para el botón "Siguiente"
+        nextButton.addEventListener('click', function() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            updateSong();
+        });
+
+        // Autoplay siguiente canción al finalizar la actual
+        audioPlayer.addEventListener('ended', function() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            updateSong();
+        });
+    </script>
+</body>
+</html>
